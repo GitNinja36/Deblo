@@ -16,12 +16,15 @@ import { ArrowRight, Loader, Loader2 } from 'lucide-react'
 import axios from 'axios'
 import DoctorAgentCard, { doctorAgent } from './DoctorAgentCard'
 import SuggestedDoctorCard from './SuggestedDoctorCard'
+import { useRouter } from 'next/navigation'
 
 function AddNewSessionDialog() {
     const [note, setNote] = useState<string>();
     const[loading, setLoading] = useState(false);
     const[suggestedDoctor, setSuggestedDoctor] = useState<doctorAgent[]>();
     const[selectedDoctor, setSlectedDoctor] = useState<doctorAgent>();
+    const router = useRouter();
+
     const OnClickNext = async() => {
         setLoading(true)
         const result = await axios.post('/api/suggest-doctors', {
@@ -31,6 +34,7 @@ function AddNewSessionDialog() {
         setSuggestedDoctor(result.data)
         setLoading(false)
     }
+
     const onStartConsultation= async()=>{
         setLoading(true)
         const result = await axios.post('/api/session-chat', {
@@ -39,10 +43,12 @@ function AddNewSessionDialog() {
         });
         console.log(result.data)
         if(result.data?.sessionId){
-            console.log(result.data.sessionId)
+            console.log(result.data.sessionId);
+            router.push('/dashboard/medical-agent/'+result.data.sessionId);
         }
         setLoading(false)
     }
+
   return (
     <Dialog>
         <DialogTrigger>
