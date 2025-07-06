@@ -25,15 +25,21 @@ function AddNewSessionDialog() {
     const[selectedDoctor, setSlectedDoctor] = useState<doctorAgent>();
     const router = useRouter();
 
-    const OnClickNext = async() => {
-        setLoading(true)
-        const result = await axios.post('/api/suggest-doctors', {
-            notes:note
-        });
-        console.log(result.data)
-        setSuggestedDoctor(result.data)
-        setLoading(false)
-    }
+    const OnClickNext = async () => {
+        setLoading(true);
+        try {
+          const result = await axios.post('/api/suggest-doctors', { notes: note });
+          if (!Array.isArray(result.data)) {
+            throw new Error("AI did not return an array");
+          }
+          setSuggestedDoctor(result.data);
+        } catch (err) {
+          console.error("Failed to fetch suggested doctors", err);
+          alert("Failed to fetch doctors. Try again later.");
+        } finally {
+          setLoading(false);
+        }
+      };
 
     const onStartConsultation= async()=>{
         setLoading(true)
@@ -51,7 +57,7 @@ function AddNewSessionDialog() {
 
   return (
     <Dialog>
-        <DialogTrigger>
+        <DialogTrigger asChild>
             <Button className='mt-3'>+ Start new Consultation</Button>
         </DialogTrigger>
         <DialogContent>
@@ -71,18 +77,25 @@ function AddNewSessionDialog() {
                         <div >
                             <h2>Select the doctor</h2>
                             <div className='grid grid-cols-3 gap-5'>
-                                {suggestedDoctor.map((doctor, index) => (
-                                    <SuggestedDoctorCard doctorAgent={doctor} key={index} setSlectedDoctor={() => setSlectedDoctor(doctor)}
-                                    //@ts-ignore
-                                    selectedDoctor={selectedDoctor} />
-                                ))}
+                            {Array.isArray(suggestedDoctor) && suggestedDoctor.length > 0 ? (
+                                suggestedDoctor.map((doctor, index) => (
+                                <SuggestedDoctorCard
+                                doctorAgent={doctor}
+                                key={index}
+                                setSlectedDoctor={() => setSlectedDoctor(doctor)}
+                                selectedDoctor={selectedDoctor}
+                                />
+                            ))
+                            ) : (
+                            <p className="text-sm text-red-500 col-span-3">No doctors found.</p>
+                            )}
                             </div>
                         </div>
                     }
                 </DialogDescription>
             </DialogHeader>
             <DialogFooter>
-                <DialogClose>
+                <DialogClose asChild>
                     <Button variant={'outline'}>Cancel</Button>
                 </DialogClose>
                 {!suggestedDoctor ?
