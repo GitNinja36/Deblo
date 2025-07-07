@@ -4,12 +4,14 @@ import Image from 'next/image'
 import React from 'react'
 
 export type doctorAgent = {
-    id : number,
-    specialist : string,
-    description : string,
-    image : string,
-    agentPrompt : string
+  id : number,
+  specialist : string,
+  description : string,
+  image : string,
+  agentPrompt : string,
+  voiceId? : string
 }
+
 type props={
     doctorAgent : doctorAgent
 }

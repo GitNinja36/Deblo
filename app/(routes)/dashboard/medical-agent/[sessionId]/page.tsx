@@ -6,7 +6,6 @@ import { doctorAgent } from '../../_components/DoctorAgentCard';
 import { Circle, PhoneCall, PhoneOff } from 'lucide-react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import Vapi from '@vapi-ai/web';
 
 type SessionDetail={
   id: number, 
@@ -29,7 +28,7 @@ function MedicalVoiceAgent() {
   const [vapiInstance, setVapiInstance] = useState<any>();
   const [currentRole, setCurrentRole] = useState<string|null>();
   const [liveTranscript, setLiveTranscript] = useState<string>();
-  const [messages, setMessages] = useState<messages[]>([])
+  const [messages, setMessages] = useState<messages[]>([]);
   
   useEffect(()=>{
     sessionId && GetSessionDetails();
@@ -41,10 +40,46 @@ function MedicalVoiceAgent() {
     setSessionDetail(result.data);
   }
 
-  const StartCall=()=>{
+  const StartCall= async()=>{
+
+    try{
+    const VapiModule = await import('@vapi-ai/web');
+    const Vapi = VapiModule.default;
+
+    console.log(sessionDetail?.selectedDoctor?.voiceId);
+    console.log(sessionDetail?.selectedDoctor?.agentPrompt);
+
     const vapi = new Vapi(process.env.NEXT_PUBLIC_VAPI_API_KEY!);
     setVapiInstance(vapi);
-    vapi.start(process.env.NEXT_PUBLIC_VAPI_VOICE_ASSISTANT_ID);
+
+    const VapiAgentConfig = {
+      name : 'AI Medical Doctor Voice Agent',
+      firstMessage : "Hey there! It's great to meet you. Just before we begin, could you please share your full name and age with me?",
+      transcriber:{
+        provider : 'assembly-ai',
+        language : 'en'
+      },
+      voice : {
+        provider : 'openai',
+        voiceId : sessionDetail?.selectedDoctor?.voiceId
+      },
+      model : {
+        provider : 'openai',
+        model : 'gpt-4',
+        messages : [
+          {
+            role : 'system',
+            content : sessionDetail?.selectedDoctor?.agentPrompt
+          }
+        ]
+      }
+    } 
+    vapi.on("error", (err) => {
+      console.error(" Vapi Error:", err);
+    });
+    //@ts-ignore
+    await vapi.start(VapiAgentConfig);
+    
     vapi.on('call-start', () => {
       console.log('Call started')
       setCallStarted(true)
@@ -74,6 +109,9 @@ function MedicalVoiceAgent() {
       console.log('Assistant stopped speaking');
       setCurrentRole('user');
     });
+  } catch (error) {
+    console.error('Vapi start failed:', error);
+  }
   }
 
   const endCall = () => {
