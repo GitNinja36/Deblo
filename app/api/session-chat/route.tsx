@@ -3,7 +3,7 @@ import { sessionChartTable, usersTable } from "@/config/schema";
 import { currentUser } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 import {v4 as uuidv4} from 'uuid';
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 
 export async function POST(req:NextRequest) {
     const {notes, selectedDoctor} = await req.json();
@@ -30,8 +30,15 @@ export async function GET(req:NextRequest) {
     const sessionId = searchParams.get('sessionId');
     const user = await currentUser();
 
-    //@ts-ignore
-    const result = await db.select().from(sessionChartTable).where(eq(sessionChartTable.sessionId, sessionId));
+    if(sessionId == 'all'){
+        //@ts-ignore
+        const result = await db.select().from(sessionChartTable).where(eq(sessionChartTable.createdBy, user?.primaryEmailAddress?.emailAddress)).orderBy(desc(sessionChartTable.id))
 
-    return NextResponse.json(result[0]);
+        return NextResponse.json(result);
+    }else{
+        //@ts-ignore
+        const result = await db.select().from(sessionChartTable).where(eq(sessionChartTable.sessionId, sessionId));
+
+        return NextResponse.json(result[0]);
+    }
 }
