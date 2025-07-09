@@ -57,7 +57,7 @@ Modern healthcare is often slow, inaccessible, and lacks instant medical attenti
 | Backend       | **API Routes**, **Drizzle ORM**, **PostgreSQL (Neon)** |
 | Authentication| **Clerk** |
 | Charts        | **Recharts.js** |
-| AI            | **OpenAI (text)**, **Vapi.ai (voice)** |
+| AI            | **OpenAI (text)**, **Vapi.ai (voice)** , **AssemblyAI(speech-to-text)**, **Gemini-2.5-flash(for finding best doctor to consult with according to symptoms and also for creating medical report)**|
 | UI Icons      | **Lucide**, **Tabler Icons** |
 | Styling Tools | **tw-animate-css**, **clsx**, **cva** |
 | Utilities     | **UUID**, **Axios**, **Moment.js** |
