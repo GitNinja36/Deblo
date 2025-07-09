@@ -5,6 +5,7 @@ import { FeatureBentoGrid } from "./_components/FeatureBentoGrid";
 import { UserButton, useUser } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function HeroSectionOne() {
   return (
@@ -106,6 +107,7 @@ export default function HeroSectionOne() {
 
 const Navbar = () => {
   const {user} = useUser();
+  const router = useRouter();
   return (
     <nav className="flex w-full items-center justify-between border-t border-b border-neutral-200 px-4 py-4 dark:border-neutral-800">
       <div className="flex items-center gap-2">
@@ -119,7 +121,7 @@ const Navbar = () => {
       </button></Link>:
       <div className="flex gap-5 items-center">
         <UserButton/>
-        <Button>Dashboard</Button>
+        <Button onClick={() => router.push('/dashboard')}>Dashboard</Button>
       </div>
       }
     </nav>
