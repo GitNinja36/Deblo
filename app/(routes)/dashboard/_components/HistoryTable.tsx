@@ -11,7 +11,7 @@ import {
 import { SessionDetail } from '../medical-agent/[sessionId]/page'
 import { Button } from '@/components/ui/button'
 import moment from 'moment';
-import { date } from 'drizzle-orm/pg-core';
+import ViewReportDialog from './ViewReportDialog';
 
 type Props={
     historyList:SessionDetail[]
@@ -36,7 +36,7 @@ function HistoryTable({historyList}:Props) {
                     <TableCell className="font-medium">{record.selectedDoctor?.specialist ?? "Unknown Specialist"}</TableCell>
                     <TableCell>{record.notes}</TableCell>
                     <TableCell>{ moment(new Date(record.createdOn)).fromNow()}</TableCell>
-                    <TableCell className="text-right"><Button variant={'link'} size={'sm'}>View Report</Button></TableCell>
+                    <TableCell className="text-right"><ViewReportDialog record={record}/></TableCell>
                 </TableRow>
             ))}
         </TableBody>
