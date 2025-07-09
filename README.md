@@ -23,14 +23,20 @@ Users can securely log in, consult with AI medical agents (text + voice), view s
 ## 🧩 Features
 
 ✅ **Clerk-based Authentication** (OAuth + email)  
-✅ **Doctor AI Agents** with medical personalities  
-✅ **Secure Session Storage** using PostgreSQL + Drizzle ORM  
-✅ **Interactive Session Timeline**  
-✅ **Bar Graph for Session Frequency**  
-✅ **Framer Motion Animations**  
-✅ **Voice Support with Vapi.ai**  
-✅ **Dark Mode** with Next-Themes  
-✅ **Modular, Scalable Folder Structure**
+✅ **AI Doctor Agents** powered by **OpenAI**  
+✅ **Real-time Voice Agent** using **Vapi.ai**  
+✅ **Speech-to-Text Transcription** with **AssemblyAI**  
+✅ **Doctor Recommendation & Report Generation** using **Gemini 2.5 Flash**  
+✅ **Session Storage & History** with PostgreSQL + Drizzle ORM  
+✅ **Interactive Timeline** of medical sessions  
+✅ **Bar Graph for Session Frequency** (using Recharts)  
+✅ **Detailed User Profile Section** with insights & health tracking  
+✅ **Billing Section** to track credits & usage  
+✅ **Secure Medical Notes & History Tracking**  
+✅ **Framer Motion-based Smooth Animations**  
+✅ **Dark Mode Support** via Next-Themes  
+✅ **Responsive & Modular UI** with Tailwind CSS  
+✅ **Scalable & Clean Folder Architecture**
 
 ---
 
@@ -57,18 +63,10 @@ Modern healthcare is often slow, inaccessible, and lacks instant medical attenti
 | Backend       | **API Routes**, **Drizzle ORM**, **PostgreSQL (Neon)** |
 | Authentication| **Clerk** |
 | Charts        | **Recharts.js** |
-| AI            | **OpenAI (text)**, **Vapi.ai (voice)** , **AssemblyAI(speech-to-text)**, **Gemini-2.5-flash(for finding best doctor to consult with according to symptoms and also for creating medical report)**|
+| AI            | **OpenAI (text)**, **Vapi.ai (voice)**, **AssemblyAI (speech-to-text)**, **Gemini 2.5 Flash (doctor recommendation & report generation)** |
 | UI Icons      | **Lucide**, **Tabler Icons** |
 | Styling Tools | **tw-animate-css**, **clsx**, **cva** |
 | Utilities     | **UUID**, **Axios**, **Moment.js** |
-
----
-
-## 🖥️ Screenshots
-
-| Profile Page with Timeline 📊 | AI Chat Session 💬 |
-|------------------------------|--------------------|
-| ![Profile Page](https://github.com/GitNinja36/deblo/assets/preview-profile.png) | ![Agent Chat](https://github.com/GitNinja36/deblo/assets/preview-chat.png) |
 
 ---
 
@@ -91,7 +89,7 @@ Using **Clerk** for secure and scalable auth:
 deblo/
 ├── app/
 │   ├── api/           # Server API Routes
-│   ├── dashboard/     # Auth-protected pages
+│   ├── dashboard/     # Auth-protected pages (billing, history, etc.)
 │   ├── profile/       # Timeline, stats & chart
 ├── config/            # DB schema + Drizzle setup
 ├── components/        # UI components (modals, timeline, chart, etc.)
