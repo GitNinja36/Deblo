@@ -40,7 +40,6 @@ function AddNewSessionDialog() {
         const result = await axios.get('/api/session-chat?sessionId=all');
         setHistoryList(result.data);
       }
-  
 
     const OnClickNext = async () => {
         setLoading(true);
