@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     Dialog,
     DialogContent,
@@ -17,13 +17,30 @@ import axios from 'axios'
 import DoctorAgentCard, { doctorAgent } from './DoctorAgentCard'
 import SuggestedDoctorCard from './SuggestedDoctorCard'
 import { useRouter } from 'next/navigation'
+import { useAuth } from '@clerk/nextjs'
+import { SessionDetail } from '../medical-agent/[sessionId]/page'
 
 function AddNewSessionDialog() {
     const [note, setNote] = useState<string>();
     const[loading, setLoading] = useState(false);
     const[suggestedDoctor, setSuggestedDoctor] = useState<doctorAgent[]>();
     const[selectedDoctor, setSlectedDoctor] = useState<doctorAgent>();
+    const [historyList, setHistoryList] = useState<SessionDetail[]>([]);
+
     const router = useRouter();
+    const { has } =  useAuth();
+    //@ts-ignore
+    const paidUser =has && has({ plan: 'pro' })
+
+    useEffect(()=>{
+        GetHistoryList();
+      }, [])
+  
+      const GetHistoryList= async()=>{
+        const result = await axios.get('/api/session-chat?sessionId=all');
+        setHistoryList(result.data);
+      }
+  
 
     const OnClickNext = async () => {
         setLoading(true);
@@ -58,7 +75,7 @@ function AddNewSessionDialog() {
   return (
     <Dialog>
         <DialogTrigger asChild>
-            <Button className='mt-3'>+ Start new Consultation</Button>
+            <Button className='mt-3' disabled={!paidUser && historyList?.length>=1}>+ Start new Consultation</Button>
         </DialogTrigger>
         <DialogContent>
             <DialogHeader>
