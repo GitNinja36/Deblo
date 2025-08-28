@@ -7,7 +7,7 @@ export async function POST(req: NextRequest) {
   
     try {
       const completion = await openai.chat.completions.create({
-        model: "google/gemini-2.5-flash-preview-05-20",
+        model: "deepseek/deepseek-chat-v3-0324",
         messages: [
           {
             role: "system",
